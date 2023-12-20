@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	img := loadImage("./img.jpg")
+	img := loadImage("./images/img.jpg")
 
 	bounds := img.Bounds()
 	grayImg := image.NewGray(bounds)
