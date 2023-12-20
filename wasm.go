@@ -29,9 +29,7 @@ func decodeImage(this js.Value, args []js.Value) interface{} {
 		return nil
 	}
 
-	// process(img)
-
-	// println(img)
+	img = process(img)
 
 	var d_buffer bytes.Buffer
 	err = jpeg.Encode(&d_buffer, img, nil)
@@ -47,7 +45,7 @@ func decodeImage(this js.Value, args []js.Value) interface{} {
 	return length
 }
 
-func process(img image.Image) {
+func process(img image.Image) image.Image {
 	grayImg := image.NewGray(img.Bounds())
 	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
 		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
@@ -55,28 +53,5 @@ func process(img image.Image) {
 		}
 	}
 
-	var buffer bytes.Buffer
-	err := jpeg.Encode(&buffer, grayImg, nil)
-	if err != nil {
-		log.Println("error encoding the image", err)
-		return
-	}
-	encodedImage := base64.StdEncoding.EncodeToString(buffer.Bytes())
-	log.Println("encoded image:", encodedImage)
+	return grayImg
 }
-
-// func decodeImage(this js.Value, args []js.Value) interface{} {
-// 	jsBytes := args[0]
-// 	length := jsBytes.Get("byteLength").Int()
-// 	data := make([]byte, length)
-// 	js.CopyBytesToGo(data, jsBytes)
-
-// 	img, err := jpeg.Decode(bytes.NewReader(data))
-// 	if err != nil {
-// 		return nil
-// 	}
-
-// 	println(img)
-
-// 	return nil
-// }
