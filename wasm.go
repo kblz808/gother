@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
-	"image"
+	"github.com/kblz808/gother/filters"
 	_ "image"
 	"image/jpeg"
 	"log"
@@ -29,7 +29,7 @@ func decodeImage(this js.Value, args []js.Value) interface{} {
 		return nil
 	}
 
-	img = process(img)
+	img = filters.Floyd(img)
 
 	var d_buffer bytes.Buffer
 	err = jpeg.Encode(&d_buffer, img, nil)
@@ -43,15 +43,4 @@ func decodeImage(this js.Value, args []js.Value) interface{} {
 	js.Global().Call("displayImage", encodedImage)
 
 	return length
-}
-
-func process(img image.Image) image.Image {
-	grayImg := image.NewGray(img.Bounds())
-	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
-		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
-			grayImg.Set(x, y, img.At(x, y))
-		}
-	}
-
-	return grayImg
 }
