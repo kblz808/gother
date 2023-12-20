@@ -1,16 +1,11 @@
-package main
+package filters
 
 import (
 	"image"
 	"image/color"
-	_ "image/jpeg"
-	"image/png"
-	"os"
 )
 
-func main() {
-	img := loadImage("./images/img.jpg")
-
+func Floyd(img image.Image) image.Image {
 	bounds := img.Bounds()
 	grayImg := image.NewGray(bounds)
 
@@ -35,7 +30,7 @@ func main() {
 		}
 	}
 
-	saveImage("./dithered_image.png", grayImg)
+	return grayImg
 }
 
 func distributeError(img *image.Gray, x, y, err int) {
@@ -53,28 +48,4 @@ func addError(c color.Gray, err int) color.Gray {
 		newY = 255
 	}
 	return color.Gray{Y: uint8(newY)}
-}
-
-func loadImage(path string) image.Image {
-	file, err := os.Open(path)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-
-	img, _, err := image.Decode(file)
-	if err != nil {
-		panic(err)
-	}
-	return img
-}
-
-func saveImage(path string, img image.Image) {
-	file, err := os.Create(path)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-
-	png.Encode(file, img)
 }
