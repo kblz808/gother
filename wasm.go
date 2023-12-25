@@ -30,6 +30,7 @@ func decodeImage(this js.Value, args []js.Value) interface{} {
 	}
 
 	img = filters.Floyd(img)
+	// img = filters.Ordered(img)
 
 	var d_buffer bytes.Buffer
 	err = jpeg.Encode(&d_buffer, img, nil)
